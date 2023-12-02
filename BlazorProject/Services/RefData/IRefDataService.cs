@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorProject.Components.Services.RefData;
+namespace BlazorProject.Services.RefData;
 
 public interface IRefDataService
 {

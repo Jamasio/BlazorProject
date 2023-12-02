@@ -1,4 +1,4 @@
-﻿namespace BlazorProject.Components.Services.RefData.Models;
+﻿namespace BlazorProject.Services.RefData.Models;
 
 public class CategoryModel
 {

@@ -1,5 +1,5 @@
 using BlazorProject.Components;
-using BlazorProject.Components.Services.RefData;
+using BlazorProject.Services.RefData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddScoped<IRefDataService, RefDataServiceMock>();
+builder.Services.AddSingleton<IRefDataService, RefDataServiceMock>();
 
 var app = builder.Build();
 

@@ -1,14 +1,14 @@
-﻿using BlazorProject.Components.Services.RefData.Models;
+﻿using BlazorProject.Services.RefData.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorProject.Components.Services.RefData;
+namespace BlazorProject.Services.RefData;
 
 public class RefDataServiceMock : IRefDataService
 {
     private List<ContextModel> contexts = new List<ContextModel>
     {
         new ContextModel { Key = "ProductA", Description = "This is context 1" },
-        new ContextModel { Key = "ProductB", Description = "This is context 2" } 
+        new ContextModel { Key = "ProductB", Description = "This is context 2" }
     };
 
     private List<CategoryModel> categories = new List<CategoryModel>

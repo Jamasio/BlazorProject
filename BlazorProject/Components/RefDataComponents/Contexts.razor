@@ -1,0 +1,30 @@
+﻿@rendermode InteractiveServer
+@inject IRefDataService refData
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var context in ((List<ContextModel>)Context.Value ?? throw new Exception("This is null")))
+        {
+            <tr>
+                <td>@context.Key</td>
+                <td>@context.Description</td>
+                <td> <a>List Categories</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    public JsonResult? Context { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Context = await refData.GetContextsAsync();
+    }
+}
