@@ -1,6 +1,8 @@
 ﻿@rendermode InteractiveServer
 @inject IRefDataService refData
 
+<h3>Contexts</h3>
+
 <table class="table">
     <thead>
         <tr>
@@ -9,22 +11,31 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var context in ((List<ContextModel>)Context.Value ?? throw new Exception("This is null")))
+        @foreach (var context in ((List<ContextModel>?)Context?.Value ?? throw new Exception("This is null")))
         {
             <tr>
                 <td>@context.Key</td>
                 <td>@context.Description</td>
-                <td> <a>List Categories</a></td>
+                <td> <button @onclick="(() => HandleClick(context.Key))">View Categories</button></td>
             </tr>
         }
     </tbody>
 </table>
 
 @code {
+    [Parameter]
     public JsonResult? Context { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnClick { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Context = await refData.GetContextsAsync();
+    }
+
+    private async Task HandleClick(string? contextKey)
+    {
+        await OnClick.InvokeAsync(contextKey);
     }
 }

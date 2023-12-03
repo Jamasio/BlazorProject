@@ -1,0 +1,44 @@
+﻿@rendermode InteractiveServer
+@inject IRefDataService refData
+
+<h3>Categories from @ContextKey</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in ((List<CategoryModel>?)Category?.Value ?? throw new Exception("This is null")))
+        {
+            <tr>
+                <td>@category.Key</td>
+                <td>@category.Description</td>
+                <td> <button @onclick="(() => HandleClick(category.Key))">View Values</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public string? ContextKey { get; set; }
+
+    [Parameter]
+    public JsonResult? Category { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnClick { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Category = await refData.GetContextCategoriesAsync(ContextKey);
+    }
+
+    private async Task HandleClick(string? categoryKey)
+    {
+        await OnClick.InvokeAsync(categoryKey);
+    }
+}

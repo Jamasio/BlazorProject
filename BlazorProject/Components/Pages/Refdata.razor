@@ -6,8 +6,50 @@
 
 <h3>Data Management</h3>
 
-<Contexts />
+@if (currentView == "contexts")
+{
+    <Contexts OnClick="HandleContextClick" />
+}
+else if (currentView == "categories")
+{
+    <Categories ContextKey="@selectedContextKey" OnClick="HandleCategoryKey" />
+}
+else if (currentView == "values")
+{
+    <Values CategoryKey="@selectedCategoryKey" ContextKey="@selectedContextKey" />
+}
+
+@if (currentView != "contexts")
+{
+    <button @onclick="GoBack">Go Back</button>
+}
 
 @code {
-    
+    private string currentView = "contexts";
+    private string? selectedContextKey;
+    private string? selectedCategoryKey;
+
+    private void HandleContextClick(string? contextKey)
+    {
+        selectedContextKey = contextKey;
+        currentView = "categories";
+    }
+
+    private void HandleCategoryKey(string? categoryKey)
+    {
+        selectedCategoryKey = categoryKey;
+        currentView = "values";
+    }
+
+    private void GoBack()
+    {
+        if (currentView == "values")
+        {
+            currentView = "categories";
+        }
+        else if (currentView == "categories")
+        {
+            currentView = "contexts";
+        }
+    }
 }
