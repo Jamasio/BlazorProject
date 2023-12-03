@@ -1,0 +1,62 @@
+﻿@rendermode InteractiveServer
+@inject IRefDataService refData
+
+@if (Context != null)
+{
+    <tr>
+        <td>@Context.Key</td>
+        <td>
+            <input type="text" @bind="editDescription" />
+            @if (string.IsNullOrWhiteSpace(editDescription))
+            {
+                <span class="text-danger">This field can't be empty.</span>
+            }
+        </td>
+        <td>
+            <button @onclick="SaveChanges" disabled="@IsSaveDisabled">Save</button>
+            <button @onclick="CancelEdit">Cancel</button>
+        </td>
+    </tr>
+}
+else
+{
+    throw new Exception("Context is null");
+}
+
+@code {
+    [Parameter]
+    public ContextModel? Context { get; set; }
+
+    [Parameter]
+    public EventCallback OnSave { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    private string? editDescription;
+    private string? originalDescription;
+    private bool IsSaveDisabled => string.IsNullOrWhiteSpace(editDescription);
+
+    protected override void OnParametersSet()
+    {
+        if (Context != null)
+        {
+            originalDescription = Context.Description;
+            editDescription = originalDescription;
+        }
+    }
+
+    private void SaveChanges()
+    {
+        if (!IsSaveDisabled && Context != null)
+        {
+            Context.Description = editDescription;
+            OnSave.InvokeAsync();
+        }
+    }
+
+    private void CancelEdit()
+    {
+        OnCancel.InvokeAsync();
+    }
+}

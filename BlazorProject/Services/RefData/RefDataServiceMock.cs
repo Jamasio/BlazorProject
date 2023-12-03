@@ -32,6 +32,16 @@ public class RefDataServiceMock : IRefDataService
     {
         return Task.FromResult(new JsonResult(contexts));
     }
+    public Task<bool> EditContextAsync(ContextModel? updatedContext)
+    {
+        var existingContext = contexts.FirstOrDefault( c => c.Key == updatedContext?.Key );
+        
+        if (existingContext != null )
+        {
+            existingContext.Description = updatedContext?.Description;
+        }
+        return Task.FromResult(existingContext != null);
+    }
     #endregion
 
     #region Categories

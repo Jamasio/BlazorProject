@@ -8,16 +8,27 @@
         <tr>
             <th>Key</th>
             <th>Description</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var context in ((List<ContextModel>?)Context?.Value ?? throw new Exception("This is null")))
         {
-            <tr>
-                <td>@context.Key</td>
-                <td>@context.Description</td>
-                <td> <button @onclick="(() => HandleClick(context.Key))">View Categories</button></td>
-            </tr>
+            if (context.Key == editContextKey)
+            {
+                <ContextEditRow Context="context" OnSave="(() => SaveChanges(context))" OnCancel="CancelEdit" />
+            }
+            else
+            {
+                <tr>
+                    <td>@context.Key</td>
+                    <td>@context.Description</td>
+                    <td>
+                        <button @onclick="(() => Edit(context.Key))">Edit</button>
+                        <button @onclick="(() => HandleClick(context.Key))">View Categories</button>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
@@ -29,9 +40,38 @@
     [Parameter]
     public EventCallback<string> OnClick { get; set; }
 
+    private string? editContextKey;
+
     protected override async Task OnInitializedAsync()
     {
         Context = await refData.GetContextsAsync();
+    }
+
+    private void Edit(string? contextKey)
+    {
+        editContextKey = contextKey;
+    }
+
+    private void CancelEdit()
+    {
+        editContextKey = null;
+    }
+
+    private async Task SaveChanges(ContextModel? context)
+    {
+        if (context != null && !string.IsNullOrWhiteSpace(context.Description))
+        {
+            bool saveSuccessful = await refData.EditContextAsync(context);
+
+            if (saveSuccessful)
+            {
+                CancelEdit();
+            }
+            else
+            {
+                Console.WriteLine("Unable to save changes.");
+            }
+        }
     }
 
     private async Task HandleClick(string? contextKey)
