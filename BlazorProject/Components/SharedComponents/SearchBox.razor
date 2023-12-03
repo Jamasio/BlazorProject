@@ -1,0 +1,13 @@
+﻿<div class="form-group">
+    <input type="text" class="form-control" placeholder="Search..." @oninput="UpdateSearch" />
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private void UpdateSearch(ChangeEventArgs? e)
+    {
+        OnSearch.InvokeAsync(e?.Value?.ToString());
+    }
+}

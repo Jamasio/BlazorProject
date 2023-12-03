@@ -12,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var context in ((List<ContextModel>?)Context?.Value ?? throw new Exception("This is null")))
+        @foreach (var context in FilteredContexts)
         {
             if (context.Key == editContextKey)
             {
@@ -40,6 +40,9 @@
     [Parameter]
     public EventCallback<string> OnClick { get; set; }
 
+    [Parameter]
+    public string? Filter { get; set; }
+
     private string? editContextKey;
 
     protected override async Task OnInitializedAsync()
@@ -47,6 +50,7 @@
         Context = await refData.GetContextsAsync();
     }
 
+    #region Edit Logic
     private void Edit(string? contextKey)
     {
         editContextKey = contextKey;
@@ -73,6 +77,17 @@
             }
         }
     }
+    #endregion
+
+    #region Search logic
+
+    private IEnumerable<ContextModel> FilteredContexts =>
+    ((List<ContextModel>?)Context?.Value ?? throw new Exception("This is null"))
+    .Where(c => string.IsNullOrEmpty(Filter) ||
+                c.Key.Contains(Filter, StringComparison.OrdinalIgnoreCase) ||
+                c.Description.Contains(Filter, StringComparison.OrdinalIgnoreCase));
+
+    #endregion
 
     private async Task HandleClick(string? contextKey)
     {

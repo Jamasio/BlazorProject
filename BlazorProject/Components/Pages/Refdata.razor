@@ -6,17 +6,19 @@
 
 <h3>Data Management</h3>
 
-@if (currentView == "contexts")
+<SearchBox OnSearch="HandleSearch"/>
+
+@switch (currentView)
 {
-    <Contexts OnClick="HandleContextClick" />
-}
-else if (currentView == "categories")
-{
-    <Categories ContextKey="@selectedContextKey" OnClick="HandleCategoryKey" />
-}
-else if (currentView == "value")
-{
-    <Value CategoryKey="@selectedCategoryKey" ContextKey="@selectedContextKey" />
+    case "contexts":
+        <Contexts OnClick="HandleContextClick" Filter="@searchTerm"/>
+        break;
+    case "categories":
+        <Categories ContextKey="@selectedContextKey" OnClick="HandleCategoryKey" />
+        break;
+    case "value":
+        <Value CategoryKey="@selectedCategoryKey" ContextKey="@selectedContextKey" />
+        break;
 }
 
 @if (currentView != "contexts")
@@ -28,6 +30,12 @@ else if (currentView == "value")
     private string currentView = "contexts";
     private string? selectedContextKey;
     private string? selectedCategoryKey;
+    private string? searchTerm;
+
+    private void HandleSearch(string? term)
+    {
+        searchTerm = term;
+    }
 
     private void HandleContextClick(string? contextKey)
     {
