@@ -7,4 +7,6 @@ public interface IRefDataService
     Task<JsonResult> GetContextsAsync();
 
     Task<JsonResult> GetContextCategoriesAsync(string? contextKey);
+
+    Task<JsonResult> GetValuesAsync(string? contextKey, string? categoryKey);
 }

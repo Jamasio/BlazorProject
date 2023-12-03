@@ -42,4 +42,13 @@ public class RefDataServiceMock : IRefDataService
         return Task.FromResult(new JsonResult(matchedCategories));
     }
     #endregion
+
+    #region Values
+    public Task<JsonResult> GetValuesAsync(string? contextKey, string? categoryKey)
+    {
+        var matchedValues = values.Where( v => v.ContextKey == contextKey && v.CategoryKey == categoryKey ).ToList();
+
+        return Task.FromResult(new JsonResult(matchedValues));
+    }
+    #endregion
 }

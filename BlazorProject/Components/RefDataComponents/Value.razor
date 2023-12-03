@@ -1,0 +1,41 @@
+﻿@rendermode InteractiveServer
+@inject IRefDataService refData
+
+<h3>Values for @ContextKey in @CategoryKey</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var value in ((List<ValueModel>?)Values?.Value ?? throw new Exception("This is null")))
+        {
+            <tr>
+                <td>@value.Key</td>
+                <td>@value.Value</td>
+                <td>@value.Description</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public JsonResult? Values { get; set; }
+
+    [Parameter]
+    public string? ContextKey { get; set; }
+
+    [Parameter]
+    public string? CategoryKey { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Values = await refData.GetValuesAsync(ContextKey, CategoryKey);
+    }
+
+}

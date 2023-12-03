@@ -14,9 +14,9 @@ else if (currentView == "categories")
 {
     <Categories ContextKey="@selectedContextKey" OnClick="HandleCategoryKey" />
 }
-else if (currentView == "values")
+else if (currentView == "value")
 {
-    <Values CategoryKey="@selectedCategoryKey" ContextKey="@selectedContextKey" />
+    <Value CategoryKey="@selectedCategoryKey" ContextKey="@selectedContextKey" />
 }
 
 @if (currentView != "contexts")
@@ -38,12 +38,12 @@ else if (currentView == "values")
     private void HandleCategoryKey(string? categoryKey)
     {
         selectedCategoryKey = categoryKey;
-        currentView = "values";
+        currentView = "value";
     }
 
     private void GoBack()
     {
-        if (currentView == "values")
+        if (currentView == "value")
         {
             currentView = "categories";
         }
