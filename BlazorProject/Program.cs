@@ -3,10 +3,15 @@ using BlazorProject.Services.RefData;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var signalR = builder.Configuration["Azure:SignalR:ConnectionString"];
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+// Added SignalR
+builder.Services.AddSignalR().AddAzureSignalR(signalR);
+// Added DataManagement
 builder.Services.AddSingleton<IRefDataService, RefDataServiceMock>();
 
 var app = builder.Build();

@@ -47,6 +47,8 @@ public class RefDataServiceMock : IRefDataService
     #region Categories
     public Task<JsonResult> GetContextCategoriesAsync(string? contextKey)
     {
+
+
         var matchedCategories = categories.Where( k => k.ContextKey == contextKey).ToList();
 
         return Task.FromResult(new JsonResult(matchedCategories));
